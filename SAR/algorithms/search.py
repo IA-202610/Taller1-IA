@@ -41,12 +41,41 @@ def breadthFirstSearch(problem: SearchProblem):
 
 
 def uniformCostSearch(problem: SearchProblem):
-    """
-    Search the node of least total cost first.
-    """
 
-    # TODO: diksjtra
-    utils.raiseNotDefined()
+    cordi = problem.getStartState() #(x, y)
+    #Inicializar cosas 
+    pq = utils.PriorityQueue()
+    bcost = {cordi: 0}
+    #Primer elemento de la pq (donde empieza), path vacío, costo 0
+    pq.push((cordi, [], 0), 0)
+
+    while not pq.isEmpty():
+        #Sacar de la pq
+        state, path, cost = pq.pop()
+        if problem.isGoalState(state): return path
+
+        #Reviso el mapa de costos a vr si toca actualizar
+        oldcost = bcost[state]
+        #Si el costo actual es mayor q el viejo no actualizo y me salto la iteración
+        if cost > oldcost: continue
+
+        #Sino, sacarle los sucesores para volver a iterar
+        for succ, action, stp_cost in problem.getSuccessors(state):
+            #El nuevo costo es el costo del state actual + el de la accion q toma ir a succ
+            newcost = cost + stp_cost
+            #se le suma al path para llegar al state actual la acción necesaria para llegar a él
+            newpath = path + [action]
+            #Si el state no está en el mapa O si está pero el costo que tiene es mayor que el que acabo de calcular
+            #Acabo de encontrar un camino mejor, actualizo el valor en el dict
+            if succ not in bcost or bcost[succ] > newcost:
+                bcost[succ] = newcost
+            
+            #Meto cada sucesor a la pq
+            pq.push((succ, newpath, newcost), newcost)
+
+    #si terminó todo y no encontró la fokin goal, retorna una lista vacía (sin acciones)
+    return []
+
 
 
 def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):

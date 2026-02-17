@@ -1,4 +1,5 @@
 from typing import Any, Tuple
+import math as m
 from algorithms import utils
 from algorithms.problems import MultiSurvivorProblem
 
@@ -12,19 +13,19 @@ def nullHeuristic(state, problem=None):
 
 
 def manhattanHeuristic(state, problem):
-    """
-    The Manhattan distance heuristic.
-    """
-    # TODO: Add your code here
-    utils.raiseNotDefined()
+    dx = abs(problem.goal[0] - state[0])
+    dy = abs(problem.goal[1] - state[1])
+    return dx + dy
 
 
 def euclideanHeuristic(state, problem):
     """
     The Euclidean distance heuristic.
     """
-    # TODO: Add your code here
-    utils.raiseNotDefined()
+    dx = problem.goal[0] - state[0]
+    dy = problem.goal[1] - state[1]
+    dist = m.sqrt(dx**2 + dy**2)
+    return dist
 
 
 def survivorHeuristic(state: Tuple[Tuple, Any], problem: MultiSurvivorProblem):

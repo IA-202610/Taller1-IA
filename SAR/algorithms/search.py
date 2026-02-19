@@ -28,8 +28,26 @@ def depthFirstSearch(problem: SearchProblem):
     print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
-    # TODO: Add your code here
-    utils.raiseNotDefined()
+    
+    stack = utils.Stack() #stack para DFS ya que es un LIFO ENTONCES EXPLORMOS PUES EL MAS PROFUNDO
+    visitado = set() #conjunto para guardar los estados ya visitados y no volver a visitarlos 
+
+    estado_inicio = problem.getStartState()
+    stack.push((estado_inicio, []))#metemos el estado inicial a la pila junto con un path vacío 
+
+    while not stack.isEmpty():
+        estado_actual, path = stack.pop()#sacamos el estado actual y el path para llegar a el de la pila
+
+        if problem.isGoalState(estado_actual):#si el estado actual es un estado objetivo, retornamos el path para llegar a él
+            return path
+
+        if estado_actual in visitado:#si el estado actual ya fue visitado, lo saltamos para evitar ciclos
+            continue
+
+        visitado.add(estado_actual)#si el estado actual no fue visitado, lo marcamos como visitado
+
+        for sucesor, accion, cost in problem.getSuccessors(estado_actual):
+            stack.push((sucesor, path + [accion]))#metemos cada sucesor del estado actual a la pila junto con el path actualizado para llegar a ese sucesor (el path actual más la acción necesaria para llegar al sucesor)
 
 
 def breadthFirstSearch(problem: SearchProblem):

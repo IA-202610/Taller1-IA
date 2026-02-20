@@ -27,6 +27,9 @@ def euclideanHeuristic(state, problem):
     dist = m.sqrt(dx**2 + dy**2)
     return dist
 
+#def calcular_MST(state):
+#    if 
+
 
 def survivorHeuristic(state: Tuple[Tuple, Any], problem: MultiSurvivorProblem):
     """
@@ -43,5 +46,13 @@ def survivorHeuristic(state: Tuple[Tuple, Any], problem: MultiSurvivorProblem):
     - Consider: distance to nearest survivor + MST of remaining survivors
     - Balance heuristic strength vs. computation time (do experiments!)
     """
-    # TODO: Add your code here
-    utils.raiseNotDefined()
+    position ,survivorgrid = state
+    if survivorgrid == []:
+        return nullHeuristic(state)
+    min_dist = m.inf
+    for survivor in survivorgrid:
+        distance = manhattanHeuristic(position, survivor)
+        if distance < min_dist:
+            min_dist = distance
+    
+#    MST_cost

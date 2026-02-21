@@ -47,12 +47,46 @@ def survivorHeuristic(state: Tuple[Tuple, Any], problem: MultiSurvivorProblem):
     - Balance heuristic strength vs. computation time (do experiments!)
     """
     position ,survivorgrid = state
-    if survivorgrid == []:
-        return nullHeuristic(state)
+    
+    survivors = []
+    for x in range(survivorgrid.width):
+        for y in range(survivorgrid.height):
+            if survivorgrid[x][y]:
+                survivors.append((x, y))
+                
+    if not survivors:
+        return 0
+    
     min_dist = m.inf
-    for survivor in survivorgrid:
-        distance = manhattanHeuristic(position, survivor)
+    for survivor in survivors:
+        distance = abs(position[0] - survivor[0]) + abs(position[1] - survivor[1])
         if distance < min_dist:
             min_dist = distance
+            
+    if len(survivors) == 1:
+        return min_dist
     
-#    MST_cost
+    mst_cost = 0
+    visited = {survivors[0]}
+    not_visited = set(survivors[1:])
+
+    while not_visited:
+        best_edge = float("inf")
+        best_node = None
+
+        for v in visited:
+            for u in not_visited:
+                dist = abs(v[0] - u[0]) + abs(v[1] - u[1])
+                if dist < best_edge:
+                    best_edge = dist
+                    best_node = u
+
+        mst_cost += best_edge
+        visited.add(best_node)
+        not_visited.remove(best_node)
+
+    return min_dist + mst_cost
+    
+    
+    
+
